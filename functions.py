@@ -10,11 +10,11 @@ classifier = pipeline(
 )
 
 MAPEO_BIG_FIVE = {
-    "Openness":  ["admiration", "amusement", "curiosity", "desire", "excitement", "joy", "nervousness", "optimism"],
-    "Conscientiousness": ["approval", "remorse", "caring",  "gratitude", "determination", "satisfaction", "pride", "realization"],
-    "Extraversion":["curiosity", "excitement", "optimism", "joy", "pride", "admiration", "amusement"],
-    "Agreeableness": ["desire", "caring", "optimism", "neutral", "approval", "gratitude", "love", "admiration"],
-    "Neuroticism": ["embarrassment", "remorse", "confusion", "anxiety", "annoyance", "fear", "anger", "disgust"]
+    "Apertura a la Experiencia":  ["admiration", "amusement", "curiosity", "desire", "excitement", "joy", "nervousness", "optimism"],
+    "Responsabilidad": ["approval", "remorse", "caring",  "gratitude", "determination", "satisfaction", "pride", "realization"],
+    "Extroversion":["curiosity", "excitement", "optimism", "joy", "pride", "admiration", "amusement"],
+    "Amabilidad": ["desire", "caring", "optimism", "neutral", "approval", "gratitude", "love", "admiration"],
+    "Neuroticismo": ["embarrassment", "remorse", "confusion", "anxiety", "annoyance", "fear", "anger", "disgust"]
 }
 
 def puntuar_texto(texto):
@@ -26,11 +26,9 @@ def puntuar_texto(texto):
     emociones = classifier(traduccion.text)
     emociones_ordenadas = sorted(emociones[0], key=lambda x: x["score"], reverse=True)
 
-    emocion_top = emociones_ordenadas[0]
+    emocion_top_estandar = emociones_ordenadas[0]["label"]
     # Traducimos a emoción máis intensa ao idioma orixinal
-    emocion_top["label"] = translator.translate(emocion_top["label"], src='en', dest=idioma).text
-
-    # Calcular as puntuacións dos rasgos de
+    emocion_top = translator.translate(emocion_top_estandar, src='en', dest=idioma).text
 
     puntuaciones = {rasgo: 0.0 for rasgo in MAPEO_BIG_FIVE.keys()}
     
@@ -39,7 +37,7 @@ def puntuar_texto(texto):
             if emocion["label"] in emociones_relacionadas:
                 puntuaciones[rasgo] += emocion["score"]
 
-    return puntuaciones, emocion_top["label"]
+    return puntuaciones, emocion_top_estandar, emocion_top 
 
 def calcular_media_puntuaciones(diario):
     # Inicializar un diccionario para acumular las puntuaciones por categoría
@@ -60,13 +58,15 @@ def niveles_personalidad(medias):
     niveles = {}
     for rasgo, media in medias.items():
         if media > 0.45:
-            niveles[rasgo] = "MUY ALTO"
+            niveles[rasgo] = 4
         elif media > 0.35:
-            niveles[rasgo] = "ALTO"
+            niveles[rasgo] = 3
         elif media > 0.2:
-            niveles[rasgo] = "MEDIO"
+            niveles[rasgo] = 2
         elif media > 0.1:
-            niveles[rasgo] = "BAJO"
+            niveles[rasgo] = 1
         else:
-            niveles[rasgo] = "MUY BAJO"
+            niveles[rasgo] = 0
     return niveles
+
+
