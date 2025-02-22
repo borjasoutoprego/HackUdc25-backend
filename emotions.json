@@ -1,0 +1,129 @@
+{
+    "emotionsList":[
+        {
+            "emotion": "Neuroticismo ",
+            "level": 0,
+            "description": "Tienes un estado emocional extremadamente estable y rara vez te afectan el estrés o las adversidades.\nMantienes una actitud positiva y optimista en casi todas las situaciones, lo que te permite afrontar los desafíos con calma y confianza.\nTu capacidad de recuperación es rápida y eficaz, y rara vez dudas de tus habilidades.\nEn el diario reflejas una gran seguridad en ti mismo y una perspectiva equilibrada ante la vida."
+        }, 
+        {
+            "emotion": "Neuroticismo ",
+            "level": 1,
+            "description": "Tienes un estado emocional equilibrado y no te alteras fácilmente ante situaciones estresantes.\nSueles ver el lado positivo de las cosas y mantienes la calma en la mayoría de las circunstancias.\nConfías en tus capacidades, lo que te permite tomar decisiones de manera racional y recuperarte con facilidad de las dificultades.\nEn el diario reflejas una actitud optimista y una buena gestión emocional."
+        },
+        {
+            "emotion": "Neuroticismo ",
+            "level": 2,
+            "description": "Tiendes a enfocarte en lo positivo, aunque en ocasiones puedes sentir estrés o inseguridad cuando buscas estabilidad.\nNo tienes tendencias ansiosas o melancólicas marcadas, pero a veces evitas la incomodidad a través de distracciones o actividades placenteras.\nEn el diario reflejas cierta insatisfacción o búsqueda de respuestas, lo que indica un nivel moderado de introspección y preocupación."
+        },
+        {
+            "emotion": "Neuroticismo ",
+            "level": 3,
+            "description": "Experimentas cambios de humor con cierta frecuencia y tiendes a sentir inseguridad o preocupación, a veces de manera excesiva.\nLas situaciones estresantes o difíciles te afectan más que a la mayoría, y puedes sentirte abrumado con facilidad.\nLa autocrítica es un factor recurrente en tu vida, lo que dificulta tu recuperación emocional en momentos complicados.\nEn el diario reflejas una tendencia a la introspección y a cuestionarte con frecuencia."
+        },
+        {
+            "emotion": "Neuroticismo ",
+            "level": 4,
+            "description": "Tus emociones son intensas y cambiantes, con frecuentes sensaciones de inseguridad, ansiedad y preocupación, a menudo irracionales.\nLas situaciones estresantes te resultan abrumadoras y te cuesta mucho recuperarte emocionalmente.\nLa autocrítica es constante y severa, lo que afecta tu capacidad para tomar decisiones y mantener la calma.\nEn el diario reflejas una alta sensibilidad emocional y una tendencia a enfocarte en los aspectos negativos de las experiencias. ¿Has pensado en hablar sobre esto con algún especialista?"
+        },
+        {
+            "emotion": "Apertura a la experiencia",
+            "level": 0,
+            "description": "Prefieres la rutina y te sientes cómodo con lo familiar y predecible.\nNo sueles buscar nuevas experiencias, cambios o desafíos, ya que te generan incomodidad o desinterés y prefieres mantener tus hábitos."
+        },
+        {
+            "emotion": "Apertura a la experiencia",
+            "level": 1,
+            "description": "Aunque no rechazas del todo las nuevas experiencias, prefieres que sean moderadas y dentro de tu zona de confort.\nValoras la tradición y la estabilidad, y no sientes una necesidad constante de explorar o experimentar."
+        },
+        {
+            "emotion": "Apertura a la experiencia",
+            "level": 2,
+            "description": "Te interesa explorar nuevas ideas y experiencias, pero de manera equilibrada y sin excesos.\nDisfrutas de la novedad ocasionalmente, pero también valoras la comodidad de lo familiar.\nEres curioso y abierto a aprender, aunque no buscas constantemente situaciones extremas o fuera de lo común."
+        },
+        {
+            "emotion": "Apertura a la experiencia",
+            "level": 3,
+            "description": "Te encanta explorar nuevas ideas, culturas y experiencias, y buscas activamente oportunidades para aprender y crecer.\nDisfrutas de la variedad y la novedad, y te sientes motivado por desafíos que te saquen de tu zona de confort."
+        },
+        {
+            "emotion": "Apertura a la experiencia",
+            "level": 4,
+            "description": "Sientes fascinación por la adrenalina, el aprendizaje, los viajes, la comida exótica y las nuevas experiencias.\nDisfrutas profundamente de la novedad y buscas constantemente expandir tus horizontes, incluso en situaciones extremas o poco convencionales."
+        },
+        {
+            "emotion": "Responsabilidad",
+            "level": 0,
+            "description": "Tiendes a priorizar el placer y la diversión sobre las obligaciones y los compromisos.\nTe cuesta establecer y mantener rutinas, y a menudo dejas tareas o proyectos sin terminar, sobre todo si requieren esfuerzo.\nNo sueles planificar con anticipación y prefieres actuar de manera espontánea, incluso si eso implica descuidar responsabilidades."
+        },
+        {
+            "emotion": "Responsabilidad",
+            "level": 1,
+            "description": "Aunque reconoces la importancia de las responsabilidades, tiendes a posponerlas o cumplirlas de manera superficial.\nPrefieres disfrutar del momento y no te preocupas demasiado por las consecuencias a largo plazo de tus acciones.\nPuedes iniciar proyectos con entusiasmo, pero te cuesta mantener la constancia y terminarlos."
+        },
+        {
+            "emotion": "Responsabilidad",
+            "level": 2,
+            "description": "Expresas deseos de equilibrar diversión con responsabilidad, pero aún parece priorizar el placer y la aventura.\nTe gusta terminar lo que empiezas y cumplir con tus compromisos, aunque puedes distraerte o procrastinar ocasionalmente.\nProcuras mejorar tu disciplina y establecer metas más claras."
+        },
+        {
+            "emotion": "Responsabilidad",
+            "level": 3,
+            "description": "Eres organizado, confiable y te esfuerzas por cumplir con tus compromisos de manera consistente.\nPlanificas con anticipación y priorizas tus responsabilidades, aunque también sabes disfrutar de momentos de diversión de manera equilibrada.\nTerminas lo que empiezas y te preocupas por construir una base sólida en tus proyectos y relaciones."
+        },
+        {
+            "emotion": "Responsabilidad",
+            "level": 4,
+            "description": "Eres extremadamente organizado, meticuloso y comprometido con tus responsabilidades.\nPlanificas cada detalle y te aseguras de cumplir con tus obligaciones de manera impecable, incluso si eso significa sacrificar tiempo de ocio, lo que no siempre es bueno.\nTienes una fuerte ética de trabajo y te esfuerzas por alcanzar la excelencia en todo lo que haces."
+        },
+        {
+            "emotion": "Extroversión",
+            "level": 0,
+            "description": "Prefieres la soledad y la tranquilidad sobre la interacción social.\nTe sientes agotado fácilmente en entornos sociales y evitas situaciones que requieran mucha interacción.\nDisfrutas de actividades introspectivas y tranquilas, como leer, meditar o pasar tiempo en ambientes familiares."
+        },
+        {
+            "emotion": "Extroversión",
+            "level": 1, 
+            "description": "Te sientes más cómodo en grupos pequeños o en entornos tranquilos, y evitas las multitudes o eventos muy sociales.\nAunque disfrutas de la compañía de personas cercanas, necesitas tiempo a solas para recargar energías.\nNo buscas activamente la interacción social, pero puedes participar en ella cuando es necesaria o con personas de confianza."
+        },
+        {
+            "emotion": "Extroversión",
+            "level": 2,
+            "description": "Disfrutas de la interacción social, pero también necesitas momentos de soledad para equilibrar tu energía.\nTe sientes cómodo en eventos sociales, aunque no siempre buscas ser el centro de atención.\nEres capaz de adaptarte a diferentes entornos, tanto sociales como tranquilos, dependiendo de tu estado de ánimo."
+        },
+        {
+            "emotion": "Extroversión",
+            "level": 3,
+            "description": "Te encanta conocer gente nueva, participar en eventos y socializar con frecuencia.\nTu energía es contagiosa y siempre estás buscando interacción y estímulos externos.\nDisfrutas siendo el centro de atención y te sientes revitalizado en entornos sociales, aunque en ocasiones muestras momentos de introspección."
+        },
+        {
+            "emotion": "Extroversión",
+            "level": 4,
+            "description": "Eres extremadamente sociable y siempre buscas oportunidades para interactuar con los demás, y sientes aburrimiento en situaciones de más soledad.\nTu energía es intensa y contagiosa, y te sientes cómodo siendo el centro de atención en cualquier situación.\nDisfrutas de eventos grandes, reuniones sociales y actividades que impliquen mucha interacción."
+        },
+        {
+            "emotion": "Amabilidad",
+            "level": 0,
+            "description": "Tiendes a ser desconfiado y competitivo, priorizando tus intereses sobre los de los demás.\nTe cuesta empatizar con las emociones de otros y puedes mostrarte indiferente o incluso hostil en situaciones de conflicto.\nPrefieres mantener distancia emocional y evitas involucrarte en situaciones que requieran cooperación o generosidad."
+        },
+        {
+            "emotion": "Amabilidad",
+            "level": 1,
+            "description": "Eres más independiente que cooperativo, y tiendes a priorizar tus objetivos sobre los de los demás, adoptando una actitud más práctica.\nAunque puedes ser amable en situaciones específicas, no buscas activamente ayudar o conectar con otros.\nTe cuesta confiar en los demás y prefieres mantener cierta distancia emocional."
+        },
+        {
+            "emotion": "Amabilidad",
+            "level": 2,
+            "description": "Eres capaz de ser amable y cooperativo, pero también valoras tu independencia y tiempo personal.\nDisfrutas de la conexión con los demás, aunque no siempre buscas activamente oportunidades para ayudar o compartir.\nPuedes empatizar con las emociones de otros, pero a veces priorizas tus propias necesidades."
+        },
+        {
+            "emotion": "Amabilidad",
+            "level": 3,
+            "description": "Muestras gratitud por las oportunidades y disfrutas compartir experiencias con los demás.\nTe sientes motivado por la conexión con otras personas, incluso de diferentes culturas o perspectivas.\nEres empático, cooperativo y buscas activamente ayudar o apoyar a los demás cuando es necesario."
+        },
+        {
+            "emotion": "Amabilidad",
+            "level": 4,
+            "description": "Eres extremadamente compasivo, empático y siempre buscas oportunidades para ayudar y conectar con los demás.\nTu generosidad y disposición para cooperar son características centrales de tu personalidad.\nTe sientes profundamente motivado por la armonía y el bienestar colectivo, incluso si eso implica sacrificar tus propios intereses."
+        }
+    ]
+}
