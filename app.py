@@ -1,15 +1,20 @@
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from gradio_client import Client
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Header
 from sqlalchemy import create_engine, Column, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 import secrets
+import uuid
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import Annotated
 
 app = FastAPI()
+
+security = HTTPBearer()
 
 origins = ["*"]
 
@@ -36,7 +41,6 @@ class UserCredentials(BaseModel):
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 
 Base = declarative_base()
 
@@ -69,20 +73,52 @@ class UserQuery(BaseModel):
 class AIResponse(BaseModel):
     response: str
 
+# Modelo de historial de usuario
+class UserHistory(Base):
+    __tablename__ = "user_history"
+    user_email = Column(String, nullable=False)
+    interaction = Column(String, nullable=False)
+    id_interaction = Column(String, primary_key=True, nullable=False)
+
 @app.post("/chat", response_model=AIResponse)
-def chat_with_ai(user_query: UserQuery):
+def chat_with_ai(user_query: UserQuery, authorization: Annotated[HTTPAuthorizationCredentials, Depends(security)], db: Session = Depends(get_db)):
     try:
-        # mensaje en el formato esperado por la API
+        if not authorization:
+            raise HTTPException(status_code=401, detail="Token no proporcionado")
+        print(authorization.credentials)
+        # Extraer email del token
+        token = authorization.credentials.split("Bearer ")[-1]
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_email = payload.get("sub")
+        
+        if not user_email:
+            raise HTTPException(status_code=401, detail="Token inválido o expirado")
+        
+        # Generar un ID único para la interacción
+        interaction_id = str(uuid.uuid4())
+        
+        # Crear mensaje en formato esperado
         messages = [{"role": "user", "content": user_query.question}]
         
         # Llamada a la API de Hugging Face Spaces
         result = client.predict(messages=messages, api_name="/predict")
         
-        # Extrae la respuesta del agente IA
         if result and isinstance(result, dict) and "response" in result:
+            
+            # Guardar la interacción en la base de datos
+            new_history = UserHistory(
+                user_email=user_email,
+                interaction=user_query.question,
+                id_interaction=interaction_id
+            )
+            db.add(new_history)
+            db.commit()
+            
             return AIResponse(response=result["response"])
         else:
             raise HTTPException(status_code=500, detail="Respuesta inesperada del agente IA")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
