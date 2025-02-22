@@ -1,27 +1,27 @@
 {
     "emotionsList":[
         {
-            "emotion": "Neuroticismo ",
+            "emotion": "Neuroticismo",
             "level": 0,
             "description": "Tienes un estado emocional extremadamente estable y rara vez te afectan el estrés o las adversidades.\nMantienes una actitud positiva y optimista en casi todas las situaciones, lo que te permite afrontar los desafíos con calma y confianza.\nTu capacidad de recuperación es rápida y eficaz, y rara vez dudas de tus habilidades.\nEn el diario reflejas una gran seguridad en ti mismo y una perspectiva equilibrada ante la vida."
         }, 
         {
-            "emotion": "Neuroticismo ",
+            "emotion": "Neuroticismo",
             "level": 1,
             "description": "Tienes un estado emocional equilibrado y no te alteras fácilmente ante situaciones estresantes.\nSueles ver el lado positivo de las cosas y mantienes la calma en la mayoría de las circunstancias.\nConfías en tus capacidades, lo que te permite tomar decisiones de manera racional y recuperarte con facilidad de las dificultades.\nEn el diario reflejas una actitud optimista y una buena gestión emocional."
         },
         {
-            "emotion": "Neuroticismo ",
+            "emotion": "Neuroticismo",
             "level": 2,
             "description": "Tiendes a enfocarte en lo positivo, aunque en ocasiones puedes sentir estrés o inseguridad cuando buscas estabilidad.\nNo tienes tendencias ansiosas o melancólicas marcadas, pero a veces evitas la incomodidad a través de distracciones o actividades placenteras.\nEn el diario reflejas cierta insatisfacción o búsqueda de respuestas, lo que indica un nivel moderado de introspección y preocupación."
         },
         {
-            "emotion": "Neuroticismo ",
+            "emotion": "Neuroticismo",
             "level": 3,
             "description": "Experimentas cambios de humor con cierta frecuencia y tiendes a sentir inseguridad o preocupación, a veces de manera excesiva.\nLas situaciones estresantes o difíciles te afectan más que a la mayoría, y puedes sentirte abrumado con facilidad.\nLa autocrítica es un factor recurrente en tu vida, lo que dificulta tu recuperación emocional en momentos complicados.\nEn el diario reflejas una tendencia a la introspección y a cuestionarte con frecuencia."
         },
         {
-            "emotion": "Neuroticismo ",
+            "emotion": "Neuroticismo",
             "level": 4,
             "description": "Tus emociones son intensas y cambiantes, con frecuentes sensaciones de inseguridad, ansiedad y preocupación, a menudo irracionales.\nLas situaciones estresantes te resultan abrumadoras y te cuesta mucho recuperarte emocionalmente.\nLa autocrítica es constante y severa, lo que afecta tu capacidad para tomar decisiones y mantener la calma.\nEn el diario reflejas una alta sensibilidad emocional y una tendencia a enfocarte en los aspectos negativos de las experiencias. ¿Has pensado en hablar sobre esto con algún especialista?"
         },

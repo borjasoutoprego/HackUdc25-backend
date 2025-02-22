@@ -1,5 +1,6 @@
 from transformers import pipeline
 from googletrans import Translator
+import json
 
 translator = Translator()
 
@@ -10,9 +11,9 @@ classifier = pipeline(
 )
 
 MAPEO_BIG_FIVE = {
-    "Apertura a la Experiencia":  ["admiration", "amusement", "curiosity", "desire", "excitement", "joy", "nervousness", "optimism"],
+    "Apertura a la experiencia":  ["admiration", "amusement", "curiosity", "desire", "excitement", "joy", "nervousness", "optimism"],
     "Responsabilidad": ["approval", "remorse", "caring",  "gratitude", "determination", "satisfaction", "pride", "realization"],
-    "Extroversion":["curiosity", "excitement", "optimism", "joy", "pride", "admiration", "amusement"],
+    "Extroversión":["curiosity", "excitement", "optimism", "joy", "pride", "admiration", "amusement"],
     "Amabilidad": ["desire", "caring", "optimism", "neutral", "approval", "gratitude", "love", "admiration"],
     "Neuroticismo": ["embarrassment", "remorse", "confusion", "anxiety", "annoyance", "fear", "anger", "disgust"]
 }
@@ -69,4 +70,25 @@ def niveles_personalidad(medias):
             niveles[rasgo] = 0
     return niveles
 
-
+def obtener_descripcion(emocion: str, nivel: int, archivo_json: str = "HackUdc25-backend/emotions.json") -> str:
+    
+    try:
+        # Cargar el archivo JSON
+        with open(archivo_json, "r", encoding="utf-8") as file:
+            datos = json.load(file)
+        
+        # Buscar la descripción correspondiente
+        for item in datos["emotionsList"]:
+            if item["emotion"].strip().lower() == emocion.strip().lower() and item["level"] == nivel:
+                return item["description"]
+        
+        # Si no se encuentra la descripción
+        return f"No se encontró una descripción para la emoción '{emocion}' con nivel {nivel}."
+    
+    except FileNotFoundError:
+        return f"El archivo '{archivo_json}' no existe."
+    except json.JSONDecodeError:
+        return f"Error al decodificar el archivo JSON '{archivo_json}'."
+    except Exception as e:
+        return f"Error inesperado: {e}"
+    
