@@ -1,7 +1,7 @@
 CREATE TABLE users (
     token VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    contraseña VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     PRIMARY KEY (email)
 );
 
@@ -21,4 +21,12 @@ CREATE TABLE personal_profile (
     score_conscientiousness DECIMAL NOT NULL,
     score_openness DECIMAL NOT NULL,
     PRIMARY KEY (user_email)
+);
+
+
+INSERT INTO users (token, email, password)
+VALUES (
+    '',  -- Token vacío inicialmente
+    'admin',
+    'admin' 
 );
