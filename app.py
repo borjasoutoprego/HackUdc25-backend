@@ -140,6 +140,11 @@ def chat_with_ai(user_query: UserQuery, authorization: Annotated[HTTPAuthorizati
         if not user_email:
             raise HTTPException(status_code=401, detail="Token inválido o expirado")
         
+        # Verificar token en base de datos
+        user = db.query(User).filter(User.email == user_email).first()
+        if not user or user.token != token:
+            raise HTTPException(status_code=401, detail="Token inválido o expirado")
+
         # Generar un ID único para la interacción
         interaction_id = str(uuid.uuid4())
         
@@ -251,6 +256,11 @@ async def get_diary_history(authorization: Annotated[HTTPAuthorizationCredential
         if not user_email:
             raise HTTPException(status_code=401, detail="Token inválido o expirado")
 
+        # Verificar token en base de datos
+        user = db.query(User).filter(User.email == user_email).first()
+        if not user or user.token != token:
+            raise HTTPException(status_code=401, detail="Token inválido o expirado")
+
         diaries = db.query(Diary).filter(Diary.user_email == user_email).order_by(Diary.date.desc()).limit(5)
 
         history = []
@@ -283,6 +293,11 @@ async def get_profile(authorization: Annotated[HTTPAuthorizationCredentials, Dep
         
         if not user_email:
             raise HTTPException(status_code=401, detail="Token inválido o expirado")
+
+        # Verificar token en base de datos
+        user = db.query(User).filter(User.email == user_email).first()
+        if not user or user.token != token:
+            raise HTTPException(status_code=401, detail="Token inválido o expirado")
         
         diaries = db.query(Diary).filter(Diary.user_email == user_email).all()
         texts = [diary.text for diary in diaries]
@@ -300,6 +315,31 @@ async def get_profile(authorization: Annotated[HTTPAuthorizationCredentials, Dep
 
         return ScoreResponse(profile=resultList)
                 
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/logout")
+async def logout(authorization: Annotated[HTTPAuthorizationCredentials, Depends(security)], db: Session = Depends(get_db)):
+    try:
+        if not authorization:
+            raise HTTPException(status_code=401, detail="Token no proporcionado")
+
+        # Extraer email del token
+        token = authorization.credentials.split("Bearer ")[-1]
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_email = payload.get("sub")
+        
+        if not user_email:
+            raise HTTPException(status_code=401, detail="Token inválido o expirado")
+        
+        # Actualizar el token en la base de datos
+        user = db.query(User).filter(User.email == user_email).first()
+        user.token = None
+        db.commit()
+
+        return {"mensaje": "Sesión cerrada correctamente"}
     except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
     except Exception as e:
