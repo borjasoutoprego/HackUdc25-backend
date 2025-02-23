@@ -24,6 +24,12 @@ CREATE TABLE personal_profile (
     PRIMARY KEY (user_email)
 );
 
+CREATE TABLE user_history (
+    user_email VARCHAR(255) REFERENCES users(email),
+    interaction TEXT NOT NULL,
+    id_interaction VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id_interaction)
+);
 
 INSERT INTO users (token, email, password)
 VALUES (
