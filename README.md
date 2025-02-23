@@ -4,6 +4,8 @@
 
 HackUdc25-backend es el backend del proyecto desarrollado en el hackathon **HackUDC 2025** como solución para el reto propuesto por la empresa patrocinadora **Kelea**. En esta aplicación realizada con FastAPI se desarrolla un asistente de Inteligencia Artificial que tiene dos roles: asistente para el apoyo emocional, y coach de bienestar y objetivos personales. Se desarrolla también un diario personal que identifica emociones en el texto. Además, la aplicación permite la clasificación de la personalidad según el modelo Big Five a través de las entradas de texto del usuario (tanto por el chat como por el diario). El proyecto dispone de dos contenedores Docker: uno para el front-end y otro para la base de datos.
 
+https://github.com/user-attachments/assets/32289498-e966-4d6d-b0f0-f5cb07d8e5f8
+
 ## Instalación
 
 1. Clona el repositorio:
