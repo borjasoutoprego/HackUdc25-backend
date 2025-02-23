@@ -1,9 +1,8 @@
-# HackUdc25-backend
+<img src="https://github.com/user-attachments/assets/760d46be-3162-4877-8af0-27793b8cc91b" width="500"/>
 
 ## Descripción
 
-
-HackUdc25-backend es el backend del proyecto desarrollado en el hackathon HackUDC como solución para el reto propuesto por la empresa patrocinadora Kelea. Es una aplicación desarrollada con FastAPI que proporciona funcionalidades para la creación de un asistente de Inteligencia Artificial para apoyo emocional, a través de un chatbot especialmente diseñado para el manejo de las emociones y un diario personal que obtiene emociones del texto. Además, la aplicación permite la clasificación de la personalidad según el modelo Big Five a través de las entradas de texto del usuario (tanto por el chat como por el diario). Todo el proyecto está contenido en un docker, donde se encuentran front-end, back-end y bases de datos.
+HackUdc25-backend es el backend del proyecto desarrollado en el hackathon **HackUDC 2025** como solución para el reto propuesto por la empresa patrocinadora **Kelea**. En esta aplicación realizada con FastAPI se desarrolla un asistente de Inteligencia Artificial que tiene dos roles: asistente para el apoyo emocional, y coach de bienestar y objetivos personales. Se desarrolla también un diario personal que identifica emociones en el texto. Además, la aplicación permite la clasificación de la personalidad según el modelo Big Five a través de las entradas de texto del usuario (tanto por el chat como por el diario). El proyecto está contenido en dos docker, uno para el front-end, y otro para el back-end y la base de datos.
 
 ## Instalación
 
@@ -39,9 +38,14 @@ HackUdc25-backend es el backend del proyecto desarrollado en el hackathon HackUD
 
 ## Funcionalidades
 
-### Consultas a IA
+### Chatbot IA
 
-- **Chat con IA**: Los usuarios pueden conversar con un modelo LLM, al que se le ha realizado un proceso de prompt-engeneering para que sea especialmente empático.
+- **Interacción con agente IA**: Los usuarios pueden conversar con un agente IA basado en el LLM [Qwen2.5-Coder-32B-Instruct](https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct). Este agente tiene dos roles:
+  * Agente de `apoyo emocional`: Ofrece apoyo emocional, analiza sentimientos y emociones, y ayuda al usuario a manejar sus emociones.
+  * Coach de `bienestar y objetivos`: Propone objetivos personalizados basados en el estado emocional del usuario y lo guía para mejorar su bienestar.
+ Para cambiar de rol, el usuario deberá enviar al agente el mensaje: `"Cambiar a modo coach"/"Cambiar a modo apoyo emocional"`.
+
+Mediante la API de gradio_client, la app realiza peticiones a este agente, el cual se encuentra alojado en el Hugging Face Spaces: [hackudc25](https://huggingface.co/spaces/borjasoutoprego/hackudc25), el cual se ha desarrollado también en el marco de este proyecto.
 
 ### Entradas de Diario
 
@@ -63,12 +67,7 @@ HackUdc25-backend es el backend del proyecto desarrollado en el hackathon HackUD
 - **Base de Datos**: PostgreSQL
 - **Autenticación**: JWT
 - **Cliente de IA**: Hugging Face Spaces
-- **Librerías Principales**:
-    - [fastapi](http://_vscodecontentref_/3)
-    - [sqlalchemy](http://_vscodecontentref_/4)
-    - [gradio_client](http://_vscodecontentref_/7)
-
 
 ## Licencia
 
-Este proyecto está licenciado bajo los términos de la licencia especificada en el archivo LICENSE.
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/borjasoutoprego/HackUdc25-backend">OfeelIA</a> by <span property="cc:attributionName">Jan Duinkerken, Nina López, Uxio Merino and Borja Souto</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
