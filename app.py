@@ -2,15 +2,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from gradio_client import Client
 from fastapi import FastAPI, HTTPException, Depends, Header
-from sqlalchemy import create_engine, Column, String
+from sqlalchemy import create_engine, Column, String, ForeignKey, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from jose import jwt, JWTError
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import secrets
 import uuid
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from typing import Annotated
+from typing import Annotated, List
+from functions import puntuar_texto
 
 app = FastAPI()
 
@@ -73,6 +74,17 @@ class UserQuery(BaseModel):
 class AIResponse(BaseModel):
     response: str
 
+# Modelo datos de salida del historico del diario
+class DiaryJson(BaseModel):
+    id: str
+    date: date
+    text: str
+    emotion_estandar: str
+    emotion_idioma: str
+
+class HistoryResponse(BaseModel):
+    history: List[DiaryJson]
+
 # Modelo de historial de usuario
 class UserHistory(Base):
     __tablename__ = "user_history"
@@ -80,14 +92,28 @@ class UserHistory(Base):
     interaction = Column(String, nullable=False)
     id_interaction = Column(String, primary_key=True, nullable=False)
 
+# Modelo para la entrada del diario
+class DiaryEntry(BaseModel):
+    text: str
+
+
+# Modelo de diario
+class Diary(Base):
+    __tablename__ = "diary"
+    id = Column(String, primary_key=True)
+    user_email = Column(String, ForeignKey("users.email"))
+    date = Column(Date, default=date.today)
+    text = Column(String)
+    emotion_estandar = Column(String)
+    emotion_idioma = Column(String)
+
 @app.post("/chat", response_model=AIResponse)
 def chat_with_ai(user_query: UserQuery, authorization: Annotated[HTTPAuthorizationCredentials, Depends(security)], db: Session = Depends(get_db)):
     try:
         if not authorization:
             raise HTTPException(status_code=401, detail="Token no proporcionado")
-        print(authorization.credentials)
         # Extraer email del token
-        token = authorization.credentials.split("Bearer ")[-1]
+        token = authorization.credentials
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_email = payload.get("sub")
         
@@ -151,22 +177,75 @@ async def login(credentials: UserCredentials, db: Session = Depends(get_db)):
 
     return {"access_token": token, "token_type": "bearer"}
 
-# Ruta protegida que requiere autenticación
-@app.get("/protegido")
-async def ruta_protegida(token: str, db: Session = Depends(get_db)):
+@app.post("/diary")
+async def add_diary_entry(
+    entry: DiaryEntry,
+    authorization: Annotated[HTTPAuthorizationCredentials, Depends(security)],
+    db: Session = Depends(get_db)
+):
+    # Verificar si el token de autorización es válido
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Token de autorización no proporcionado")
+    
+    token = authorization.credentials
+
     try:
-        # Verificar el token
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
+        email = payload.get("sub")
+        if not email:
             raise HTTPException(status_code=401, detail="Token inválido o expirado")
     except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
-
-    # Verificar si el token coincide con el almacenado en la base de datos
+    
+    # Verificar token en base de datos
     user = db.query(User).filter(User.email == email).first()
-
     if not user or user.token != token:
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    
+    # Calcular la emoción del diario
+    _, emotion_estandar, emotion_idioma = puntuar_texto(entry.text)
 
-    return {"mensaje": "Acceso concedido", "email": email}
+    # Crear entrada en el diario
+    new_entry = Diary(
+        id = str(uuid.uuid4()),
+        user_email = email,
+        text = entry.text,
+        emotion_estandar = emotion_estandar, 
+        emotion_idioma = emotion_idioma
+    )
+    db.add(new_entry)
+    db.commit()
+
+    return {"mensaje": "Entrada de diario añadida correctamente"}
+
+@app.get("/history")
+async def get_diary_history(authorization: Annotated[HTTPAuthorizationCredentials, Depends(security)], db: Session = Depends(get_db)):
+    try:
+        if not authorization:
+            raise HTTPException(status_code=401, detail="Token no proporcionado")
+        # Extraer email del token
+        token = authorization.credentials
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_email = payload.get("sub")
+        
+        if not user_email:
+            raise HTTPException(status_code=401, detail="Token inválido o expirado")
+
+        diaries = db.query(Diary).filter(Diary.user_email == user_email).order_by(Diary.date.desc()).limit(5)
+
+        history = []
+        for diary in diaries:
+            history.append(DiaryJson(
+                id = diary.id,
+                date=diary.date,
+                text=diary.text,
+                emotion_estandar=diary.emotion_estandar,
+                emotion_idioma=diary.emotion_idioma
+            ))
+
+        return HistoryResponse(history=history)
+
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -1,13 +1,11 @@
 from transformers import pipeline
-from googletrans import Translator
+import requests
 import json
-
-translator = Translator()
 
 classifier = pipeline(
     task="text-classification",
     model="joeddav/distilbert-base-uncased-go-emotions-student",
-    top_k=None  # Mostrar todas las emociones detectadas
+    top_k=None
 )
 
 MAPEO_BIG_FIVE = {
@@ -18,18 +16,38 @@ MAPEO_BIG_FIVE = {
     "Neuroticismo": ["embarrassment", "remorse", "confusion", "anxiety", "annoyance", "fear", "anger", "disgust"]
 }
 
+def translate_text(text, dest='en', src='auto'):
+    """Traduce texto usando la API de Google Translate"""
+    url = "https://translate.googleapis.com/translate_a/single"
+    params = {
+        'client': 'gtx',
+        'sl': src,
+        'tl': dest,
+        'dt': 't',
+        'q': text
+    }
+    
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    
+    # Extraer texto traducido y lenguaje detectado
+    translated_text = response.json()[0][0][0]
+    detected_lang = response.json()[2]  # Código de idioma detectado
+    
+    
+    return translated_text, detected_lang
+
 def puntuar_texto(texto):
-    # Traducir o texto a ingles
-    traduccion = translator.translate(texto, dest='en')
-    # Almacenamos o idioma no que escribiu o usuario
-    idioma = traduccion.src
-    # Clasificar as emocions do texto
-    emociones = classifier(traduccion.text)
+    # Traducir a inglés y detectar idioma
+    texto_traducido, idioma = translate_text(texto, dest='en')
+    
+    # Clasificar emociones
+    emociones = classifier(texto_traducido)
     emociones_ordenadas = sorted(emociones[0], key=lambda x: x["score"], reverse=True)
 
+    # Traducir emoción top al idioma original
     emocion_top_estandar = emociones_ordenadas[0]["label"]
-    # Traducimos a emoción máis intensa ao idioma orixinal
-    emocion_top = translator.translate(emocion_top_estandar, src='en', dest=idioma).text
+    emocion_top_traducida, _ = translate_text(emocion_top_estandar, dest=idioma, src='en')
 
     puntuaciones = {rasgo: 0.0 for rasgo in MAPEO_BIG_FIVE.keys()}
     
@@ -38,7 +56,7 @@ def puntuar_texto(texto):
             if emocion["label"] in emociones_relacionadas:
                 puntuaciones[rasgo] += emocion["score"]
 
-    return puntuaciones, emocion_top_estandar, emocion_top 
+    return puntuaciones, emocion_top_estandar, emocion_top_traducida
 
 def calcular_media_puntuaciones(diario):
     # Inicializar un diccionario para acumular las puntuaciones por categoría

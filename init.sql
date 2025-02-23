@@ -6,11 +6,12 @@ CREATE TABLE users (
 );
 
 CREATE TABLE diary (
+    id VARCHAR(255) PRIMARY KEY,
     user_email VARCHAR(255) REFERENCES users(email),
     date DATE NOT NULL,
     text TEXT NOT NULL,
-    emotion VARCHAR(255) NOT NULL,
-    PRIMARY KEY (user_email, date)
+    emotion_estandar VARCHAR(255) NOT NULL,
+    emotion_idioma VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE personal_profile (
