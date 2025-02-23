@@ -64,9 +64,8 @@ def calcular_media_puntuaciones(diario):
     contador = len(diario)  # Número de entradas en el diario
 
     # Sumar las puntuaciones de cada categoría
-    for fecha, datos in diario.items():
-        puntuaciones_directas = datos["puntuaciones_big_five"]
-        for rasgo, puntuacion in puntuaciones_directas.items():
+    for item in diario:
+        for rasgo, puntuacion in item.items():
             acumulador[rasgo] += puntuacion
 
     # Calcular la media de cada categoría
@@ -109,4 +108,3 @@ def obtener_descripcion(emocion: str, nivel: int, archivo_json: str = "HackUdc25
         return f"Error al decodificar el archivo JSON '{archivo_json}'."
     except Exception as e:
         return f"Error inesperado: {e}"
-    

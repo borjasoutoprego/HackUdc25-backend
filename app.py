@@ -2,16 +2,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from gradio_client import Client
 from fastapi import FastAPI, HTTPException, Depends, Header
-from sqlalchemy import create_engine, Column, String, ForeignKey, Date
+from sqlalchemy import create_engine, Column, String, ForeignKey, Date, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from jose import jwt, JWTError
 from datetime import datetime, timedelta, date
 import secrets
 import uuid
+import json
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Annotated, List
-from functions import puntuar_texto
+from functions import puntuar_texto, calcular_media_puntuaciones, niveles_personalidad
 
 app = FastAPI()
 
@@ -48,9 +49,20 @@ Base = declarative_base()
 # Modelo de usuario
 class User(Base):
     __tablename__ = "users"
+    token = Column(String, nullable=True)
     email = Column(String, primary_key=True, index=True)
     password = Column(String)
-    token = Column(String, nullable=True)
+    
+
+# Modelo del perfil
+class Profile(Base):
+    __tablename__ = "personal_profile"
+    user_email = Column(String, primary_key=True, index=True)
+    score_neuroticismo = Column(Float, nullable=False)
+    score_extroversión = Column(Float, nullable=False)
+    score_agreeableness = Column(Float, nullable=False)
+    score_conscientiousness = Column(Float, nullable=False)
+    score_openness = Column(Float, nullable=False)
 
 # Crear las tablas
 Base.metadata.create_all(bind=engine)
@@ -74,6 +86,15 @@ class UserQuery(BaseModel):
 class AIResponse(BaseModel):
     response: str
 
+class TraitJson(BaseModel):
+    trait: str
+    score: int
+    description: str
+
+# Modelo de salida de la puntuación
+class ScoreResponse(BaseModel):
+    profile: List[TraitJson]
+
 # Modelo datos de salida del historico del diario
 class DiaryJson(BaseModel):
     id: str
@@ -95,7 +116,6 @@ class UserHistory(Base):
 # Modelo para la entrada del diario
 class DiaryEntry(BaseModel):
     text: str
-
 
 # Modelo de diario
 class Diary(Base):
@@ -245,6 +265,41 @@ async def get_diary_history(authorization: Annotated[HTTPAuthorizationCredential
 
         return HistoryResponse(history=history)
 
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/profile")
+async def get_profile(authorization: Annotated[HTTPAuthorizationCredentials, Depends(security)], db: Session = Depends(get_db)):
+    try:
+        if not authorization:
+            raise HTTPException(status_code=401, detail="Token no proporcionado")
+
+        # Extraer email del token
+        token = authorization.credentials.split("Bearer ")[-1]
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_email = payload.get("sub")
+        
+        if not user_email:
+            raise HTTPException(status_code=401, detail="Token inválido o expirado")
+        
+        diaries = db.query(Diary).filter(Diary.user_email == user_email).all()
+        texts = [diary.text for diary in diaries]
+        scores = [puntuar_texto(text)[0] for text in texts]
+        averages = calcular_media_puntuaciones(scores)
+        levels = niveles_personalidad(averages)
+
+        resultList = []
+        for trait, score in levels.items():
+            with open("emotions.json", "r", encoding="utf-8") as file:
+                data = json.load(file)
+                trait_features = list(filter(lambda x: x["emotion"] == trait and x["level"] == score, data["emotionsList"]))
+                trait_json = TraitJson(trait=trait, score=score, description=trait_features[0]["description"])
+                resultList.append(trait_json)
+
+        return ScoreResponse(profile=resultList)
+                
     except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
     except Exception as e:
